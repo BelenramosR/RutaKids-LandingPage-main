@@ -1,0 +1,23 @@
+{
+  "sectionTitle": "How does it work?",
+  "sectionSubtitle": "Safety and peace of mind at every step of the school journey",
+  "stepCounter": "Step {{current}} of {{total}}",
+  "steps": [
+    {
+      "title": "Student registration",
+      "description": "Schools register students and assign routes and stops to ensure a safe experience from day one."
+    },
+    {
+      "title": "Route monitoring",
+      "description": "Track the school bus live. Families feel secure knowing where their children are at all times."
+    },
+    {
+      "title": "Automatic notifications",
+      "description": "Get instant alerts when your child gets on or off the bus. Because every second of peace of mind counts."
+    },
+    {
+      "title": "Arrival at school",
+      "description": "Confirm the student's safe arrival at school. Guaranteed safety from the bus stop to the classroom."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "title": "A powerful app for parents, peace of mind for your school",
+  "subtitle": "RutaKids connects families and schools in real time. These features enhance the parent experience and reduce school workload:",
+  "quote": "“A school that informs and cares is a school families trust.”",
+  "features": [
+    {
+      "title": "Automatic notifications",
+      "description": "Instant alerts when the student boards or gets off the bus."
+    },
+    {
+      "title": "Real-time location",
+      "description": "Track the bus journey right from your phone."
+    },
+    {
+      "title": "Arrival confirmation",
+      "description": "Receive automatic confirmation when the student arrives at school."
+    },
+    {
+      "title": "Full history",
+      "description": "Access travel and school attendance records."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Request a personalized meeting",
+  "subtitle": "Fill in the details and we will contact you to schedule an evaluation call.",
+  "success": "Request sent successfully.",
+  "error": "Error sending request.",
+  "form": {
+    "school": "School name",
+    "name": "Contact name",
+    "email": "Institutional email",
+    "position": "Position",
+    "roles": {
+      "director": "Principal",
+      "coordinator": "Coordinator",
+      "transport": "Transport manager",
+      "admin": "Administrative",
+      "other": "Other"
+    },
+    "vehicles": "Number of school vehicles",
+    "country": "Select your country",
+    "departamento": "Select a department",
+    "provincia": "Select a province",
+    "distrito": "Select a district",
+    "address": "Exact address",
+    "submit": "Submit request"
+  }
+}

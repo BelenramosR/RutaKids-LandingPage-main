@@ -1,0 +1,33 @@
+{
+  "sectionLabel": "Why choose us?",
+  "sectionTitle": "Discover the benefits of RutaKids",
+  "features": [
+    {
+      "title": "School transport control",
+      "description": "Supervise and manage school transportation efficiently with real-time visibility.",
+      "bullets": [
+        "Track departures and arrivals in real time",
+        "Integrated RFID technology",
+        "Full visibility for the school"
+      ]
+    },
+    {
+      "title": "Instant communication",
+      "description": "Keep families informed with automatic notifications and instant updates.",
+      "bullets": [
+        "Automatic parent notifications",
+        "Real-time updates",
+        "Greater peace of mind for families"
+      ]
+    },
+    {
+      "title": "Efficient management for schools",
+      "description": "Manage routes, attendance and students from an intuitive, centralized web dashboard.",
+      "bullets": [
+        "User-friendly and accessible web panel",
+        "Manage routes, attendance and more",
+        "Daily operational optimization"
+      ]
+    }
+  ]
+}

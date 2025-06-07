@@ -1,0 +1,23 @@
+{
+  "title": "Una app poderosa para los padres, tranquilidad para tu colegio",
+  "subtitle": "RutaKids conecta a las familias con el colegio en tiempo real. Estas funciones mejoran la experiencia del padre y reducen la carga del colegio:",
+  "quote": "“Un colegio que informa y cuida, es un colegio en el que las familias confían.”",
+  "features": [
+    {
+      "title": "Notificaciones automáticas",
+      "description": "Alertas al instante cuando el estudiante sube o baja del bus."
+    },
+    {
+      "title": "Ubicación en tiempo real",
+      "description": "Sigue el trayecto del bus desde el celular."
+    },
+    {
+      "title": "Confirmación de llegada",
+      "description": "Recibe confirmación automática al llegar al colegio."
+    },
+    {
+      "title": "Historial completo",
+      "description": "Accede a registros de viajes y asistencia escolar."
+    }
+  ]
+}

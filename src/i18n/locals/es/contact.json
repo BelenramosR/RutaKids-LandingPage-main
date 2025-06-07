@@ -1,0 +1,26 @@
+{
+  "title": "Solicita una reunión personalizada",
+  "subtitle": "Completa los datos y te contactaremos para coordinar una videollamada de evaluación.",
+  "success": "Solicitud enviada con éxito.",
+  "error": "Error al enviar solicitud.",
+  "form": {
+    "school": "Nombre del colegio",
+    "name": "Nombre del contacto",
+    "email": "Correo institucional",
+    "position": "Cargo",
+    "roles": {
+      "director": "Director(a)",
+      "coordinator": "Coordinador(a)",
+      "transport": "Encargado de transporte",
+      "admin": "Administrativo",
+      "other": "Otro"
+    },
+    "vehicles": "Cantidad de vehículos escolares",
+    "country": "Seleccione su país",
+    "departamento": "Seleccione un departamento",
+    "provincia": "Seleccione una provincia",
+    "distrito": "Seleccione un distrito",
+    "address": "Dirección exacta",
+    "submit": "Enviar solicitud"
+  }
+}

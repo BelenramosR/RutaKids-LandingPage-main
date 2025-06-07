@@ -1,0 +1,24 @@
+{
+  "sectionTitle": "¿Cómo funciona?",
+  "sectionSubtitle": "Seguridad y tranquilidad en cada paso del camino escolar",
+  "stepCounter": "Paso {{current}} de {{total}}",
+
+  "steps": [
+    {
+      "title": "Registro del estudiante",
+      "description": "Los colegios registran a los estudiantes y asignan rutas y paradas para asegurar una experiencia segura desde el primer día."
+    },
+    {
+      "title": "Monitoreo de ruta",
+      "description": "Monitorea en vivo el trayecto del bus escolar. Da a las familias la seguridad de saber dónde están sus hijos, en todo momento."
+    },
+    {
+      "title": "Notificaciones automáticas",
+      "description": "Recibe alertas instantáneas cuando tu hijo sube o baja del bus. Porque cada segundo de tranquilidad cuenta."
+    },
+    {
+      "title": "Ingreso al colegio",
+      "description": "Confirma la llegada segura del estudiante al colegio. Seguridad garantizada desde el inicio hasta el aula."
+    }
+  ]
+}
