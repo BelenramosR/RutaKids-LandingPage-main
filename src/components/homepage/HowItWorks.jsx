@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaUserCheck, FaMapMarkedAlt, FaBell, FaSchool } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
     {
@@ -27,30 +30,123 @@ export default function HowItWorks({ forwardedRef }) {
     const stepTexts = t("steps", { returnObjects: true });
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const [fadeIn, setFadeIn] = useState(true);
-    const [inView, setInView] = useState(false);
-
     const sectionRef = useRef(null);
+    const titleRef = useRef(null);
+    const subtitleRef = useRef(null);
+    const containerRef = useRef(null);
+    const stepsRef = useRef([]);
+    const contentRef = useRef(null);
+    const videoRef = useRef(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => setInView(entry.isIntersecting),
-            { threshold: 0.4 }
-        );
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
+        const ctx = gsap.context(() => {
+            // Set initial states
+            gsap.set([titleRef.current, subtitleRef.current], {
+                opacity: 0,
+                y: 50
+            });
+
+            gsap.set(containerRef.current, {
+                opacity: 0,
+                y: 80,
+                scale: 0.95
+            });
+
+            // Create scroll trigger animation
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            tl.to(titleRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            })
+            .to(subtitleRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            }, "-=0.4")
+            .to(containerRef.current, {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1,
+                ease: "back.out(1.7)"
+            }, "-=0.4");
+
+            // Animate steps on load
+            gsap.fromTo(stepsRef.current, {
+                scale: 0,
+                opacity: 0
+            }, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                delay: 1
+            });
+
+        }, sectionRef);
+
+        return () => ctx.revert();
     }, []);
 
     useEffect(() => {
+        // Auto-advance steps
         const interval = setInterval(() => {
-            setFadeIn(false);
-            setTimeout(() => {
-                setActiveIndex((prev) => (prev + 1) % steps.length);
-                setFadeIn(true);
-            }, 300);
+            setActiveIndex((prev) => (prev + 1) % steps.length);
         }, 7000);
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        // Animate content change
+        if (contentRef.current && videoRef.current) {
+            gsap.fromTo(contentRef.current, {
+                opacity: 0,
+                x: -30
+            }, {
+                opacity: 1,
+                x: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            });
+
+            gsap.fromTo(videoRef.current, {
+                opacity: 0,
+                scale: 0.9,
+                rotation: 2
+            }, {
+                opacity: 1,
+                scale: 1,
+                rotation: 0,
+                duration: 0.8,
+                ease: "back.out(1.7)"
+            });
+        }
+    }, [activeIndex]);
+
+    const handleStepClick = (index) => {
+        setActiveIndex(index);
+        
+        // Animate clicked step
+        gsap.to(stepsRef.current[index], {
+            scale: 1.1,
+            duration: 0.2,
+            ease: "power2.out",
+            yoyo: true,
+            repeat: 1
+        });
+    };
 
     return (
         <section
@@ -61,47 +157,35 @@ export default function HowItWorks({ forwardedRef }) {
                 if (forwardedRef) forwardedRef.current = el;
             }}
         >
-            <motion.h2
-                key={`title-${inView}`}
+            <h2
+                ref={titleRef}
                 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-gray-900 mb-2 z-10 relative"
-                initial={{ opacity: 0, y: -40 }}
-                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: -40 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
             >
                 {t("sectionTitle")}
-            </motion.h2>
+            </h2>
 
-            <motion.p
-                key={`subtitle-${inView}`}
+            <p
+                ref={subtitleRef}
                 className="text-lg sm:text-xl md:text-2xl pb-10 text-gray-600 mt-2 text-center max-w-2xl z-10 relative mb-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             >
                 {t("sectionSubtitle")}
-            </motion.p>
+            </p>
 
-            <div className="backdrop-blur-xl bg-white/60 border border-white/30 rounded-3xl shadow-2xl w-full max-w-screen-xl px-4 sm:px-6 md:p-14 py-10 transition-all duration-700 ease-in-out z-10 relative">
+            <div 
+                ref={containerRef}
+                className="backdrop-blur-xl bg-white/60 border border-white/30 rounded-3xl shadow-2xl w-full max-w-screen-xl px-4 sm:px-6 md:p-14 py-10 transition-all duration-700 ease-in-out z-10 relative"
+            >
                 <div className="flex flex-wrap justify-center sm:gap-8 md:gap-16 mb-12 sm:mb-16 relative">
                     {steps.map((step, idx) => (
-                        <motion.div
+                        <div
                             key={idx}
-                            onClick={() => {
-                                setFadeIn(false);
-                                setTimeout(() => {
-                                    setActiveIndex(idx);
-                                    setFadeIn(true);
-                                }, 300);
-                            }}
+                            ref={el => stepsRef.current[idx] = el}
+                            onClick={() => handleStepClick(idx)}
                             className={`relative cursor-pointer transition-all duration-500 flex items-center justify-center ${
                                 activeIndex === idx
                                     ? "scale-130 z-20"
                                     : "opacity-50 hover:opacity-100"
                             }`}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: false }}
-                            transition={{ duration: 0.6, delay: idx * 0.1 }}
                         >
                             <div className="w-20 h-20 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 shadow-[0_0_14px_4px_rgba(37,99,235,0.3)] transition-all duration-300 z-auto">
                                 {step.icon}
@@ -126,61 +210,55 @@ export default function HowItWorks({ forwardedRef }) {
                                     />
                                 </svg>
                             )}
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
 
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeIndex}
-                        className="flex flex-col md:flex-row justify-between items-center gap-14"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <div className="w-full md:w-1/2">
-                            <p className="uppercase text-sm text-blue-500 font-semibold mb-2 tracking-wide">
-                                {t("stepCounter", {
-                                    current: activeIndex + 1,
-                                    total: steps.length
-                                })}
-                            </p>
-                            <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
-                                {stepTexts[activeIndex].title}
-                            </h3>
-                            <p className="text-lg md:text-xl text-gray-700 font-medium leading-relaxed">
-                                {stepTexts[activeIndex].description}
-                            </p>
-                        </div>
+                <div className="flex flex-col md:flex-row justify-between items-center gap-14">
+                    <div ref={contentRef} className="w-full md:w-1/2">
+                        <p className="uppercase text-sm text-blue-500 font-semibold mb-2 tracking-wide">
+                            {t("stepCounter", {
+                                current: activeIndex + 1,
+                                total: steps.length
+                            })}
+                        </p>
+                        <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
+                            {stepTexts[activeIndex].title}
+                        </h3>
+                        <p className="text-lg md:text-xl text-gray-700 font-medium leading-relaxed">
+                            {stepTexts[activeIndex].description}
+                        </p>
+                    </div>
 
-                        <div className="w-full md:w-1/2 flex justify-center">
-                            <div className="bg-black w-full max-w-lg h-56 md:h-64 rounded-2xl shadow-xl overflow-hidden">
-                                <img
-                                    src={steps[activeIndex].video}
-                                    alt="Paso visual"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
+                    <div className="w-full md:w-1/2 flex justify-center">
+                        <div 
+                            ref={videoRef}
+                            className="bg-black w-full max-w-lg h-56 md:h-64 rounded-2xl shadow-xl overflow-hidden"
+                        >
+                            <img
+                                src={steps[activeIndex].video}
+                                alt="Paso visual"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
-                    </motion.div>
-                </AnimatePresence>
+                    </div>
+                </div>
             </div>
 
             <style>{`
-        .animate-circle-timer {
-          animation: countdownCircle 7s linear forwards;
-        }
+                .animate-circle-timer {
+                    animation: countdownCircle 7s linear forwards;
+                }
 
-        @keyframes countdownCircle {
-          from {
-            stroke-dashoffset: 0;
-          }
-          to {
-            stroke-dashoffset: 188;
-          }
-        }
-      `}</style>
+                @keyframes countdownCircle {
+                    from {
+                        stroke-dashoffset: 0;
+                    }
+                    to {
+                        stroke-dashoffset: 188;
+                    }
+                }
+            `}</style>
         </section>
     );
 }
