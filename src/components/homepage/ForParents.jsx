@@ -32,21 +32,11 @@ export default function ParentsSection({ forwardedRef }) {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Set initial states for mockups with better positioning
-            gsap.set(iosRef.current, {
+            // Set initial states - versión original
+            gsap.set([iosRef.current, androidRef.current], {
                 opacity: 0,
-                y: 60,
-                x: 30,
-                rotation: 8,
-                scale: 0.9
-            });
-
-            gsap.set(androidRef.current, {
-                opacity: 0,
-                y: 80,
-                x: -20,
-                rotation: -5,
-                scale: 0.85
+                y: 100,
+                rotation: 10
             });
 
             gsap.set([titleRef.current, subtitleRef.current, quoteRef.current, storesRef.current], {
@@ -70,32 +60,27 @@ export default function ParentsSection({ forwardedRef }) {
                 }
             });
 
-            // Animate iOS mockup with smooth entrance
+            // Animate mockups with floating effect - versión original
             tl.to(iosRef.current, {
                 opacity: 1,
                 y: 0,
-                x: 0,
                 rotation: 0,
-                scale: 1,
-                duration: 1.4,
-                ease: "power3.out"
+                duration: 1.2,
+                ease: "back.out(1.7)"
             })
-            // Animate Android mockup with slight delay and different easing
             .to(androidRef.current, {
                 opacity: 1,
                 y: 0,
-                x: 0,
                 rotation: 0,
-                scale: 1,
-                duration: 1.6,
-                ease: "power3.out"
-            }, "-=1.0")
+                duration: 1.2,
+                ease: "back.out(1.7)"
+            }, "-=0.8")
             .to(titleRef.current, {
                 opacity: 1,
                 x: 0,
                 duration: 0.8,
                 ease: "power3.out"
-            }, "-=0.8")
+            }, "-=0.6")
             .to(subtitleRef.current, {
                 opacity: 1,
                 x: 0,
@@ -108,7 +93,7 @@ export default function ParentsSection({ forwardedRef }) {
                 scale: 1,
                 duration: 0.6,
                 stagger: 0.1,
-                ease: "power2.out"
+                ease: "back.out(1.7)"
             }, "-=0.4")
             .to(quoteRef.current, {
                 opacity: 1,
@@ -123,30 +108,22 @@ export default function ParentsSection({ forwardedRef }) {
                 ease: "power3.out"
             }, "-=0.4");
 
-            // Improved floating animations with more natural movement
-            const iosFloating = gsap.timeline({ repeat: -1, yoyo: true });
-            iosFloating.to(iosRef.current, {
-                y: -8,
-                rotation: 1,
-                duration: 3,
-                ease: "sine.inOut"
+            // Floating animation for mockups - versión original
+            gsap.to(iosRef.current, {
+                y: -10,
+                duration: 2,
+                ease: "power2.inOut",
+                yoyo: true,
+                repeat: -1
             });
 
-            const androidFloating = gsap.timeline({ repeat: -1, yoyo: true, delay: 1.5 });
-            androidFloating.to(androidRef.current, {
-                y: 12,
-                rotation: -1,
-                duration: 3.5,
-                ease: "sine.inOut"
-            });
-
-            // Subtle breathing effect for both mockups
-            const breathingTl = gsap.timeline({ repeat: -1, yoyo: true });
-            breathingTl.to([iosRef.current, androidRef.current], {
-                scale: 1.02,
-                duration: 4,
-                ease: "sine.inOut",
-                stagger: 0.5
+            gsap.to(androidRef.current, {
+                y: 10,
+                duration: 2.5,
+                ease: "power2.inOut",
+                yoyo: true,
+                repeat: -1,
+                delay: 0.5
             });
 
             // Feature cards hover animations
@@ -154,8 +131,8 @@ export default function ParentsSection({ forwardedRef }) {
                 if (feature) {
                     feature.addEventListener('mouseenter', () => {
                         gsap.to(feature, {
-                            scale: 1.03,
-                            y: -3,
+                            scale: 1.05,
+                            y: -5,
                             duration: 0.3,
                             ease: "power2.out"
                         });
@@ -177,8 +154,7 @@ export default function ParentsSection({ forwardedRef }) {
             storeButtons?.forEach(button => {
                 button.addEventListener('mouseenter', () => {
                     gsap.to(button, {
-                        scale: 1.05,
-                        y: -2,
+                        scale: 1.1,
                         duration: 0.3,
                         ease: "power2.out"
                     });
@@ -187,40 +163,11 @@ export default function ParentsSection({ forwardedRef }) {
                 button.addEventListener('mouseleave', () => {
                     gsap.to(button, {
                         scale: 1,
-                        y: 0,
                         duration: 0.3,
                         ease: "power2.out"
                     });
                 });
             });
-
-            // Interactive hover for mockups
-            const mockupContainer = mockupsRef.current;
-            if (mockupContainer) {
-                mockupContainer.addEventListener('mouseenter', () => {
-                    gsap.to(iosRef.current, {
-                        rotation: 2,
-                        scale: 1.05,
-                        duration: 0.4,
-                        ease: "power2.out"
-                    });
-                    gsap.to(androidRef.current, {
-                        rotation: -2,
-                        scale: 1.05,
-                        duration: 0.4,
-                        ease: "power2.out"
-                    });
-                });
-
-                mockupContainer.addEventListener('mouseleave', () => {
-                    gsap.to([iosRef.current, androidRef.current], {
-                        rotation: 0,
-                        scale: 1,
-                        duration: 0.4,
-                        ease: "power2.out"
-                    });
-                });
-            }
 
         }, sectionRef);
 
@@ -237,47 +184,29 @@ export default function ParentsSection({ forwardedRef }) {
             }}
         >
             <div className="max-w-screen-xl w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
-                {/* Mockups animados mejorados */}
-                <div 
-                    ref={mockupsRef} 
-                    className="relative w-full flex justify-center items-center min-h-[420px] sm:min-h-[480px] cursor-pointer"
-                >
-                    {/* iOS mockup */}
+                {/* Mockups animados - versión original */}
+                <div ref={mockupsRef} className="relative w-full flex justify-center items-center min-h-[420px] sm:min-h-[480px]">
                     <div
                         ref={iosRef}
-                        className="absolute z-10"
-                        style={{ willChange: 'transform' }}
+                        className="absolute"
                     >
                         <img
                             src={ios}
-                            alt="iOS App Mockup"
-                            className="w-40 sm:w-48 md:w-56 lg:w-64 drop-shadow-2xl"
-                            style={{ 
-                                filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.15))',
-                                transform: 'translateX(12px) sm:translateX(3px)'
-                            }}
+                            alt="Mockup atras"
+                            className="w-40 sm:w-48 md:w-56 lg:w-64 relative z-0 sm:translate-x-3 translate-x-12"
                         />
                     </div>
 
-                    {/* Android mockup */}
                     <div
                         ref={androidRef}
-                        className="absolute z-20"
-                        style={{ willChange: 'transform' }}
+                        className="absolute z-10"
                     >
                         <img
                             src={android}
-                            alt="Android App Mockup"
-                            className="w-40 sm:w-48 md:w-56 lg:w-64 drop-shadow-2xl"
-                            style={{ 
-                                filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.2))',
-                                transform: 'translateX(-10px) translateY(10px) sm:translateX(-32px) sm:translateY(16px)'
-                            }}
+                            alt="Mockup adelante"
+                            className="w-40 sm:w-48 md:w-56 lg:w-64 mx-auto sm:-translate-x-32 sm:translate-y-16 -translate-x-10 translate-y-10"
                         />
                     </div>
-
-                    {/* Decorative elements */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-100/20 to-transparent rounded-full blur-3xl"></div>
                 </div>
 
                 <div className="text-center lg:text-left">
@@ -300,7 +229,7 @@ export default function ParentsSection({ forwardedRef }) {
                             <div
                                 key={i}
                                 ref={el => featuresRef.current[i] = el}
-                                className="p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300 cursor-pointer"
+                                className="p-5 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300"
                             >
                                 <div className="flex items-start gap-3">
                                     <div className="mt-1">{icons[i]}</div>
@@ -327,12 +256,12 @@ export default function ParentsSection({ forwardedRef }) {
                         <img
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/203px-Download_on_the_App_Store_Badge.svg.png?20170219160111"
                             alt="App Store"
-                            className="h-12 sm:h-10 mx-auto sm:mx-0 cursor-pointer transition-transform"
+                            className="h-12 sm:h-10 mx-auto sm:mx-0 cursor-pointer"
                         />
                         <img
                             src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
                             alt="Google Play"
-                            className="h-12 sm:h-10 mx-auto sm:mx-0 cursor-pointer transition-transform"
+                            className="h-12 sm:h-10 mx-auto sm:mx-0 cursor-pointer"
                         />
                     </div>
                 </div>
