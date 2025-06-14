@@ -28,34 +28,34 @@ const LazySection = ({ Component }) => {
     );
 };
 
-const App = () => {
-    const [isLoading, setIsLoading] = useState(true);
-
-    const handleLoadingComplete = () => {
-        setIsLoading(false);
-    };
+export default function App() {
+    const [loadingComplete, setLoadingComplete] = useState(false);
 
     return (
-        <main>
-            {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-            
-            <div style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.5s ease-in-out' }}>
-                <NavBar />
-                <Suspense fallback={<div style={{ height: '100vh' }}>Cargando...</div>}>
-                    <Hero />
-                </Suspense>
-                <LazySection Component={WhyRutaKids} />
-                <LazySection Component={HowItWorks} />
-                <LazySection Component={ForParents} />
-                <LazySection Component={ForSchool} />
-                <AboutUs />
-                <LazySection Component={AboutTheProduct} />
-                <LazySection Component={Contact} />
-                <Footer />
-                <LanguageSwitcher />
-            </div>
-        </main>
-    );
-};
+        <>
+            {!loadingComplete && (
+                <LoadingScreen onLoadingComplete={() => setLoadingComplete(true)} />
+            )}
 
-export default App;
+            {loadingComplete && (
+                <div>
+                    <NavBar />
+                    <Suspense fallback={<div style={{ height: '100vh' }}>Cargando...</div>}>
+                        <Hero />
+                    </Suspense>
+                    <LazySection Component={WhyRutaKids} />
+                    <LazySection Component={HowItWorks} />
+                    <LazySection Component={ForParents} />
+                    <LazySection Component={ForSchool} />
+                    <AboutUs />
+                    <LazySection Component={AboutTheProduct} />
+                    <LazySection Component={Contact} />
+                    <Footer />
+                    <LanguageSwitcher />
+                </div>
+            )}
+        </>
+    );
+}
+
+

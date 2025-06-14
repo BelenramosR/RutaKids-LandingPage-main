@@ -11,26 +11,17 @@ export default function NavBar({ sectionRefs }) {
   const { t } = useTranslation('navbar');
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true
-    });
-    
+    const lenis = new Lenis();
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
-
-    // Store lenis instance globally for navigation
-    window.lenis = lenis;
   }, []);
 
   useEffect(() => {
@@ -42,63 +33,6 @@ export default function NavBar({ sectionRefs }) {
     });
   }, []);
 
-  const smoothScrollTo = (targetId) => {
-    if (isNavigating) return;
-    
-    setIsNavigating(true);
-    setMenuOpen(false);
-
-    const target = document.getElementById(targetId);
-    if (!target) {
-      setIsNavigating(false);
-      return;
-    }
-
-    // Create elegant navigation animation
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setIsNavigating(false);
-      }
-    });
-
-    // Add a subtle page transition effect
-    tl.to("body", {
-      duration: 0.3,
-      ease: "power2.inOut"
-    })
-    .call(() => {
-      // Use Lenis for smooth scrolling
-      if (window.lenis) {
-        window.lenis.scrollTo(target, {
-          duration: 1.5,
-          easing: (t) => 1 - Math.pow(1 - t, 3)
-        });
-      } else {
-        // Fallback smooth scroll
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    })
-    .to("body", {
-      duration: 0.3,
-      ease: "power2.inOut"
-    });
-
-    // Add visual feedback to clicked nav item
-    const clickedLink = event?.target;
-    if (clickedLink) {
-      gsap.to(clickedLink, {
-        scale: 0.95,
-        duration: 0.1,
-        yoyo: true,
-        repeat: 1,
-        ease: "power2.out"
-      });
-    }
-  };
-
   const navItems = [
     { id: "hero", label: t('home') },
     { id: "¿Por_qué_elegirnos?", label: t('benefits') },
@@ -106,23 +40,17 @@ export default function NavBar({ sectionRefs }) {
     { id: "padres", label: t('parents') },
     { id: "colegios", label: t('schools') },
     { id: "contactanos", label: t('contact') },
+
+
   ];
 
   return (
       <header
           ref={navBar}
-          className="fixed top-0 z-50 w-full -translate-y-full flex items-center justify-between bg-white/95 backdrop-blur-md px-5 py-3 shadow-lg border-b border-white/20"
+          className="fixed top-0 z-50 w-full -translate-y-full flex items-center justify-between bg-white px-5 py-3 shadow-md"
       >
         {/* Logo */}
-        <a 
-          href="#hero" 
-          aria-label="Logo" 
-          className="flex items-center gap-2 transition-transform hover:scale-105"
-          onClick={(e) => {
-            e.preventDefault();
-            smoothScrollTo('hero');
-          }}
-        >
+        <a href="#hero" aria-label="Logo" className="flex items-center gap-2">
           <svg
               width="36"
               height="36"
@@ -143,25 +71,16 @@ export default function NavBar({ sectionRefs }) {
                 fill="#2563EB"/>
             <path d="M64 172.5V138.5H756.5L64 172.5Z" fill="#2563EB" stroke="#2563EB"/>
           </svg>
+
         </a>
 
+
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex gap-6 items-center justify-center font-medium text-sm lg:text-body-1 text-gray-800">
+        <nav className="hidden lg:flex gap-6 items-center justify-center font-medium text-gray-800" style={{ fontSize: '18px' }}>
           {navItems.map(item => (
-              <a 
-                key={item.id} 
-                href={`#${item.id}`} 
-                className="relative group transition-all duration-300 hover:text-blue-600 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  smoothScrollTo(item.id);
-                }}
-              >
-                <span className="relative z-10">{item.label}</span>
-                <span className="absolute bottom-0 left-0 h-[2px] w-0 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500 group-hover:w-full"></span>
-                
-                {/* Hover background effect */}
-                <span className="absolute inset-0 bg-blue-50 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10"></span>
+              <a key={item.id} href={`#${item.id}`} className="relative group">
+                <span>{item.label}</span>
+                <span className="absolute bottom-0 left-0 h-[2px] w-0 rounded-full bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
               </a>
           ))}
         </nav>
@@ -170,39 +89,28 @@ export default function NavBar({ sectionRefs }) {
         <a
             ref={cta}
             href="#Login"
-            className="ml-4 px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 border border-blue-600 transition-all duration-300 hidden lg:inline-block transform hover:scale-105 hover:shadow-lg"
+            className="ml-4 px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-transparent hover:text-blue-600 border border-blue-600 transition hidden lg:inline-block"
         >
           {t('login')}
         </a>
 
         {/* Mobile Menu Toggle */}
-        <button 
-          className="lg:hidden text-2xl text-gray-700 transition-transform hover:scale-110" 
-          onClick={toggleMenu}
-        >
+        <button className="lg:hidden text-2xl text-gray-700" onClick={toggleMenu}>
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        {/* Enhanced Mobile Nav */}
+        {/* Mobile Nav */}
         {menuOpen && (
-            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-xl py-6 px-6 space-y-4 lg:hidden border-t border-gray-200">
+            <div className="absolute top-full left-0 w-full bg-white shadow-lg py-4 px-6 space-y-4 lg:hidden">
               {navItems.map(item => (
-                  <a 
-                    key={item.id} 
-                    href={`#${item.id}`} 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      smoothScrollTo(item.id);
-                    }} 
-                    className="block text-gray-800 py-3 px-4 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 border-l-4 border-transparent hover:border-blue-500"
-                  >
+                  <a key={item.id} href={`#${item.id}`} onClick={() => setMenuOpen(false)} className="block text-gray-800">
                     {item.label}
                   </a>
               ))}
               <a
                   href="#Login"
                   onClick={() => setMenuOpen(false)}
-                  className="block bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 mt-4"
+                  className="block bg-blue-600 text-white text-center py-2 rounded-full hover:bg-blue-700"
               >
                 {t('login')}
               </a>

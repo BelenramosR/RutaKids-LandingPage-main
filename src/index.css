@@ -27,13 +27,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  @font-face {
-    font-family: "CabinetGrotesk-Variable";
-    src: url("../../../WebstormProjects/ruta-kids-landingpage/src/assets/fonts/CabinetGrotesk-Variable.ttf") format("truetype");
-    font-weight: 100 900;
-    font-display: swap;
-    font-style: normal;
-  }
+
 
   @font-face {
     font-family: "GeneralSans-Variable";
